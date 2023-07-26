@@ -7,6 +7,7 @@
 
 import UserNotifications
 
+@objc(NotificationService)
 class NotificationService: UNNotificationServiceExtension {
 
     var contentHandler: ((UNNotificationContent) -> Void)?
