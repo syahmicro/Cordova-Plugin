@@ -40,8 +40,8 @@ class NotificationService: UNNotificationServiceExtension {
                 let payload = try JSONDecoder().decode(IFXPNSContent.self, from: jsonData)
                 
                 // Modify the notification content here...
-                bestAttemptContent.title = payload.title
-                bestAttemptContent.body =  payload.body
+                bestAttemptContent.title = "Test Title"
+                bestAttemptContent.body =  "Test Body"
                 
                 print("Custom payload pageId " + payload.pageId)
                 print("Custom payload action " + payload.action)
