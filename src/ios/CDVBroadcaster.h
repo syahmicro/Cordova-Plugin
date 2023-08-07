@@ -1,8 +1,7 @@
-/********* CDVbroadcaster.m Cordova Plugin Implementation *******/
+// /********* CDVbroadcaster.m Cordova Plugin Implementation *******/
 
-#import <Cordova/CDV.h>
+// #import <Cordova/CDV.h>
 
-@interface CDVBroadcaster : CDVPlugin
+// @interface CDVBroadcaster : CDVPlugin
 
-@end
-
+// @end

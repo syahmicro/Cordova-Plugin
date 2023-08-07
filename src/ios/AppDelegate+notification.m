@@ -9,7 +9,7 @@
 #import "AppDelegate+notification.h"
 #import "PushPlugin.h"
 #import <objc/runtime.h>
-#import "CDVBroadcaster.h"
+// #import "CDVBroadcaster.h"
 
 static char launchNotificationKey;
 static char coldstartKey;

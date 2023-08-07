@@ -1,201 +1,201 @@
-/********* CDVbroadcaster.m Cordova Plugin Implementation *******/
+// /********* CDVbroadcaster.m Cordova Plugin Implementation *******/
 
-#import "CDVBroadcaster.h"
-
-
-static inline void throwWithName( NSError *error, NSString* name )
-{
-    if (error) {
-        @throw [NSException exceptionWithName:name
-                                       reason:error.debugDescription
-                                     userInfo:@{ @"NSError" : error }];
-    }
-}
-
-@interface CDVBroadcaster () {
-  // Member variables go here.
-}
-
-@property (nonatomic,strong) NSMutableDictionary *observerMap;
-
-- (void)fireNativeEvent:(CDVInvokedUrlCommand*)command;
-- (void)fireEvent:(NSString *)eventName data:(NSDictionary*)data ;
-- (void)addEventListener:(CDVInvokedUrlCommand*)command;
-- (void)removeEventListener:(CDVInvokedUrlCommand*)command;
-
-@end
+// #import "CDVBroadcaster.h"
 
 
-@implementation CDVBroadcaster
+// static inline void throwWithName( NSError *error, NSString* name )
+// {
+//     if (error) {
+//         @throw [NSException exceptionWithName:name
+//                                        reason:error.debugDescription
+//                                      userInfo:@{ @"NSError" : error }];
+//     }
+// }
 
-- (void)dealloc
-{
+// @interface CDVBroadcaster () {
+//   // Member variables go here.
+// }
 
-    for ( id observer in self.observerMap) {
+// @property (nonatomic,strong) NSMutableDictionary *observerMap;
 
-        [[NSNotificationCenter defaultCenter] removeObserver:observer];
+// - (void)fireNativeEvent:(CDVInvokedUrlCommand*)command;
+// - (void)fireEvent:(NSString *)eventName data:(NSDictionary*)data ;
+// - (void)addEventListener:(CDVInvokedUrlCommand*)command;
+// - (void)removeEventListener:(CDVInvokedUrlCommand*)command;
 
-    }
-
-    [_observerMap removeAllObjects];
-
-    _observerMap = nil;
-
-}
-
--(void)fireJsEvent:(NSString *)eventName jsonData:(NSString *)jsonDataString
-{
-    NSString *func =
-    [NSString stringWithFormat:@"window.broadcaster.fireEvent('%@', %@);", eventName, jsonDataString];
-
-    [self.commandDelegate evalJs:func];
-}
-
--(void)fireJsEvent:(NSString *)eventName jsonData:(NSString *)jsonDataString scheduledOnRunLoop:(BOOL)scheduledOnRunLoop
-{
-    NSString *func =
-    [NSString stringWithFormat:@"window.broadcaster.fireEvent('%@', %@);", eventName, jsonDataString];
-
-    [self.commandDelegate evalJs:func scheduledOnRunLoop:scheduledOnRunLoop];
-}
-
--(NSMutableDictionary *)observerMap
-{
-    if (!_observerMap) {
-        _observerMap = [[NSMutableDictionary alloc] initWithCapacity:100];
-    }
-    return _observerMap;
-}
-
-- (void)fireEvent:(NSString *)eventName data:(NSDictionary*)data
-{
-    if (!self.commandDelegate ) {
-        return;
-    }
-
-    if (eventName == nil || [eventName length] == 0) {
-
-        @throw [NSException exceptionWithName:NSInvalidArgumentException
-                                       reason:@"eventName is null or empty"
-                                     userInfo:nil];
-    }
-
-    NSString *jsonDataString = @"{}";
-
-    if( data  ) {
-
-        NSError *error;
-        NSData *jsonData = [NSJSONSerialization dataWithJSONObject:data
-                                                           options:(NSJSONWritingOptions)0
-                                                             error:&error];
-
-        if (! jsonData) {
-            throwWithName(error, @"JSON Serialization exception");
-            return;
-        }
-
-        jsonDataString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
-    }
-
-    [self fireJsEvent:eventName jsonData:jsonDataString];
+// @end
 
 
-}
+// @implementation CDVBroadcaster
 
-- (void)addEventListener:(CDVInvokedUrlCommand*)command
-{
-    CDVPluginResult* pluginResult;
+// - (void)dealloc
+// {
 
-    __block NSString* eventName = command.arguments[0];
+//     for ( id observer in self.observerMap) {
 
-    if (eventName == nil || [eventName length] == 0) {
-        pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"eventName is null or empty"];
-        [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
-        return;
-    }
+//         [[NSNotificationCenter defaultCenter] removeObserver:observer];
 
-    id observer = self.observerMap[eventName];
+//     }
 
-    if (!observer) {
-        __typeof(self) __weak weakSelf = self;
+//     [_observerMap removeAllObjects];
 
-        observer = [[NSNotificationCenter defaultCenter] addObserverForName:eventName
-                                                                     object:nil
-                                                                      queue:[NSOperationQueue mainQueue]
-                                                                 usingBlock:^(NSNotification *note) {
+//     _observerMap = nil;
 
-                                                                     __typeof(self) __strong strongSelf = weakSelf;
+// }
 
-                                                                     [strongSelf fireEvent:eventName data:note.userInfo];
+// -(void)fireJsEvent:(NSString *)eventName jsonData:(NSString *)jsonDataString
+// {
+//     NSString *func =
+//     [NSString stringWithFormat:@"window.broadcaster.fireEvent('%@', %@);", eventName, jsonDataString];
 
-                                                                 }];
-        [self.observerMap setObject:observer forKey:eventName];
-    }
+//     [self.commandDelegate evalJs:func];
+// }
 
-    pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
+// -(void)fireJsEvent:(NSString *)eventName jsonData:(NSString *)jsonDataString scheduledOnRunLoop:(BOOL)scheduledOnRunLoop
+// {
+//     NSString *func =
+//     [NSString stringWithFormat:@"window.broadcaster.fireEvent('%@', %@);", eventName, jsonDataString];
 
-    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+//     [self.commandDelegate evalJs:func scheduledOnRunLoop:scheduledOnRunLoop];
+// }
 
-}
+// -(NSMutableDictionary *)observerMap
+// {
+//     if (!_observerMap) {
+//         _observerMap = [[NSMutableDictionary alloc] initWithCapacity:100];
+//     }
+//     return _observerMap;
+// }
+
+// - (void)fireEvent:(NSString *)eventName data:(NSDictionary*)data
+// {
+//     if (!self.commandDelegate ) {
+//         return;
+//     }
+
+//     if (eventName == nil || [eventName length] == 0) {
+
+//         @throw [NSException exceptionWithName:NSInvalidArgumentException
+//                                        reason:@"eventName is null or empty"
+//                                      userInfo:nil];
+//     }
+
+//     NSString *jsonDataString = @"{}";
+
+//     if( data  ) {
+
+//         NSError *error;
+//         NSData *jsonData = [NSJSONSerialization dataWithJSONObject:data
+//                                                            options:(NSJSONWritingOptions)0
+//                                                              error:&error];
+
+//         if (! jsonData) {
+//             throwWithName(error, @"JSON Serialization exception");
+//             return;
+//         }
+
+//         jsonDataString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+//     }
+
+//     [self fireJsEvent:eventName jsonData:jsonDataString];
 
 
-- (void)removeEventListener:(CDVInvokedUrlCommand*)command
-{
+// }
 
-    CDVPluginResult* pluginResult;
+// - (void)addEventListener:(CDVInvokedUrlCommand*)command
+// {
+//     CDVPluginResult* pluginResult;
 
-    __block NSString* eventName = command.arguments[0];
-    if (eventName == nil || [eventName length] == 0) {
-        pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"eventName is null or empty"];
-        [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
-        return;
-    }
+//     __block NSString* eventName = command.arguments[0];
 
-    id observer = self.observerMap[ eventName ];
+//     if (eventName == nil || [eventName length] == 0) {
+//         pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"eventName is null or empty"];
+//         [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+//         return;
+//     }
 
-    if (observer) {
+//     id observer = self.observerMap[eventName];
 
-        [[NSNotificationCenter defaultCenter] removeObserver:observer
-                                                        name:eventName
-                                                      object:self];
-    }
+//     if (!observer) {
+//         __typeof(self) __weak weakSelf = self;
 
-    pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
+//         observer = [[NSNotificationCenter defaultCenter] addObserverForName:eventName
+//                                                                      object:nil
+//                                                                       queue:[NSOperationQueue mainQueue]
+//                                                                  usingBlock:^(NSNotification *note) {
 
-    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+//                                                                      __typeof(self) __strong strongSelf = weakSelf;
 
-}
+//                                                                      [strongSelf fireEvent:eventName data:note.userInfo];
 
-- (void)fireNativeEvent:(CDVInvokedUrlCommand*)command
-{
-    CDVPluginResult* pluginResult = nil;
-    NSString* eventName = command.arguments[0];
+//                                                                  }];
+//         [self.observerMap setObject:observer forKey:eventName];
+//     }
 
-    if (eventName == nil || [eventName length] == 0) {
-        pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"eventName is null or empty"];
-        [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
-        return;
-    }
+//     pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
 
-    id data = command.arguments[1];
+//     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 
-    if (data!=nil && ![data isKindOfClass:[NSDictionary class]]) {
-        pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"data is not a json object"];
-        [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
-        return;
-    }
+// }
 
-    [[NSNotificationCenter defaultCenter] postNotificationName:eventName object:self userInfo:data];
 
-    pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
+// - (void)removeEventListener:(CDVInvokedUrlCommand*)command
+// {
 
-    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
-}
+//     CDVPluginResult* pluginResult;
 
-/**
- * Override method for onAppTerminate provided in CDVPlugin.h
- */
-- (void)onAppTerminate {
-    [self fireJsEvent:@"willterminate" jsonData:@"{}" scheduledOnRunLoop:NO];
-}
-@end
+//     __block NSString* eventName = command.arguments[0];
+//     if (eventName == nil || [eventName length] == 0) {
+//         pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"eventName is null or empty"];
+//         [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+//         return;
+//     }
+
+//     id observer = self.observerMap[ eventName ];
+
+//     if (observer) {
+
+//         [[NSNotificationCenter defaultCenter] removeObserver:observer
+//                                                         name:eventName
+//                                                       object:self];
+//     }
+
+//     pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
+
+//     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+
+// }
+
+// - (void)fireNativeEvent:(CDVInvokedUrlCommand*)command
+// {
+//     CDVPluginResult* pluginResult = nil;
+//     NSString* eventName = command.arguments[0];
+
+//     if (eventName == nil || [eventName length] == 0) {
+//         pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"eventName is null or empty"];
+//         [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+//         return;
+//     }
+
+//     id data = command.arguments[1];
+
+//     if (data!=nil && ![data isKindOfClass:[NSDictionary class]]) {
+//         pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"data is not a json object"];
+//         [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+//         return;
+//     }
+
+//     [[NSNotificationCenter defaultCenter] postNotificationName:eventName object:self userInfo:data];
+
+//     pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
+
+//     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+// }
+
+// /**
+//  * Override method for onAppTerminate provided in CDVPlugin.h
+//  */
+// - (void)onAppTerminate {
+//     [self fireJsEvent:@"willterminate" jsonData:@"{}" scheduledOnRunLoop:NO];
+// }
+// @end
