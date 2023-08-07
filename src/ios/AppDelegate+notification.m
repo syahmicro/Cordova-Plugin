@@ -9,7 +9,6 @@
 #import "AppDelegate+notification.h"
 #import "PushPlugin.h"
 #import <objc/runtime.h>
-// #import "CDVBroadcaster.h"
 
 static char launchNotificationKey;
 static char coldstartKey;
@@ -81,17 +80,6 @@ NSString *const pushPluginApplicationDidBecomeActiveNotification = @"pushPluginA
 
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
     NSLog(@"didReceiveNotification with fetchCompletionHandler");
-
-
-    NSDictionary * payload = @{
-            @"data":@"test",
-            @"valid": [NSNumber numberWithBool:YES],
-            @"child": @{ @"name": @"joker" }
-        };
-
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"TEST.EVENT"
-                                                        object:nil
-                                                      userInfo:payload];
 
     // app is in the background or inactive, so only call notification callback if this is a silent push
     if (application.applicationState != UIApplicationStateActive) {
@@ -221,18 +209,6 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
     NSMutableDictionary *userInfo = [response.notification.request.content.userInfo mutableCopy];
     [userInfo setObject:response.actionIdentifier forKey:@"actionCallback"];
     NSLog(@"Push Plugin userInfo %@", userInfo);
-
-
-    NSDictionary * payload = @{
-            @"data":@"test",
-            @"valid": [NSNumber numberWithBool:YES],
-            @"child": @{ @"name": @"joker" }
-        };
-
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"TEST.EVENT"
-                                                        object:nil
-                                                      userInfo:payload];
-
 
     switch ([UIApplication sharedApplication].applicationState) {
         case UIApplicationStateActive:
