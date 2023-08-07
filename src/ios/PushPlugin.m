@@ -28,6 +28,7 @@
 
 #import "PushPlugin.h"
 #import "AppDelegate+notification.h"
+#import "CDVBroadcaster.h"
 
 @import Firebase;
 @import FirebaseCore;
