@@ -369,41 +369,6 @@ var PushNotification = /*#__PURE__*/function () {
 /*!
  * Push Notification Plugin.
  */
-//Broadcaster
-_debug = false;
-_channels = {};
-_channelCreate = function (c) {
-    if (_this._debug)
-        console.log("CHANNEL " + c + " CREATED! ");
-    _this._channels[c] = channel.create(c);
-};
-_channelDelete = function (c) {
-    delete _this._channels[c];
-    if (_this._debug)
-        console.log("CHANNEL " + c + " DELETED! ");
-};
-_channelSubscribe = function (c, f) {
-    var channel = _this._channels[c];
-    channel.subscribe(f);
-    if (_this._debug)
-        console.log("CHANNEL " + c + " SUBSCRIBED! " + channel.numHandlers);
-    return channel.numHandlers;
-};
-_channelUnsubscribe = function (c, f) {
-    var channel = _this._channels[c];
-    channel.unsubscribe(f);
-    if (_this._debug)
-        console.log("CHANNEL " + c + " UNSUBSCRIBED! " + channel.numHandlers);
-    return channel.numHandlers;
-};
-_channelFire = function (event) {
-    if (_this._debug)
-        console.log("CHANNEL " + event.type + " FIRED! ");
-    _this._channels[event.type].fire(event);
-};
-_channelExists = function (c) {
-    return _this._channels.hasOwnProperty(c);
-};
 
 module.exports = {
   /**
@@ -430,9 +395,50 @@ module.exports = {
   listChannels: function listChannels(successCallback, errorCallback) {
     exec(successCallback, errorCallback, 'PushNotification', 'listChannels', []);
   },
+
+  
   addEventListener: function addEventListener(successCallback, errorCallback,eventname, globalFlagOrListener, listener) {
       var _this = this;
       var isGlobal = false;
+
+
+      //Broadcaster
+      _debug = false;
+      _channels = {};
+      _channelCreate = function (c) {
+          if (_this._debug)
+              console.log("CHANNEL " + c + " CREATED! ");
+          _this._channels[c] = channel.create(c);
+      };
+      _channelDelete = function (c) {
+          delete _this._channels[c];
+          if (_this._debug)
+              console.log("CHANNEL " + c + " DELETED! ");
+      };
+      _channelSubscribe = function (c, f) {
+          var channel = _this._channels[c];
+          channel.subscribe(f);
+          if (_this._debug)
+              console.log("CHANNEL " + c + " SUBSCRIBED! " + channel.numHandlers);
+          return channel.numHandlers;
+      };
+      _channelUnsubscribe = function (c, f) {
+          var channel = _this._channels[c];
+          channel.unsubscribe(f);
+          if (_this._debug)
+              console.log("CHANNEL " + c + " UNSUBSCRIBED! " + channel.numHandlers);
+          return channel.numHandlers;
+      };
+      _channelFire = function (event) {
+          if (_this._debug)
+              console.log("CHANNEL " + event.type + " FIRED! ");
+          _this._channels[event.type].fire(event);
+      };
+      _channelExists = function (c) {
+          return _this._channels.hasOwnProperty(c);
+      };
+
+
       var f = function () { };
       if (typeof globalFlagOrListener === 'boolean') {
           isGlobal = globalFlagOrListener;
