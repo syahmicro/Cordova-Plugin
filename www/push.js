@@ -452,7 +452,7 @@ module.exports = {
       else {
           this._channelSubscribe(eventname, f);
       }
-      exec(successCallback, errorCallback, 'PushNotification', 'addEventListener', [eventname, isGlobal]);
+      // exec(successCallback, errorCallback, 'PushNotification', 'addEventListener', [eventname, isGlobal]);
   },
 
 
