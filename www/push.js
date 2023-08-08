@@ -336,32 +336,32 @@ var PushNotification = /*#__PURE__*/function () {
 
       exec(successCallback, errorCallback, 'PushNotification', 'finish', [id]);
     }
-  },
-  {
-    key: "addEventListener",
-    value: function addEventListener(eventname, globalFlagOrListener, listener){
-      var _this = this;
-      var isGlobal = false;
-      var f = function () { };
-      if (typeof globalFlagOrListener === 'boolean') {
-          isGlobal = globalFlagOrListener;
-          if (!listener)
-              throw "listener must be defined!";
-          f = listener;
-      }
-      else if (typeof globalFlagOrListener === 'function') {
-          f = globalFlagOrListener;
-      }
-      if (!this._channelExists(eventname)) {
-          this._channelCreate(eventname);
-          exec(function () { return _this._channelSubscribe(eventname, f); }, function (err) { return console.log("ERROR addEventListener: ", err); }, "PushNotification", "addEventListener", [eventname, isGlobal]);
-      }
-      else {
-          this._channelSubscribe(eventname, f);
-      }
-      exec(successCallback, errorCallback, 'PushNotification', 'addEventListener', [eventname, isGlobal]);
-    }
   }
+  // {
+  //   key: "addEventListener",
+  //   value: function addEventListener(eventname, globalFlagOrListener, listener){
+  //     var _this = this;
+  //     var isGlobal = false;
+  //     var f = function () { };
+  //     if (typeof globalFlagOrListener === 'boolean') {
+  //         isGlobal = globalFlagOrListener;
+  //         if (!listener)
+  //             throw "listener must be defined!";
+  //         f = listener;
+  //     }
+  //     else if (typeof globalFlagOrListener === 'function') {
+  //         f = globalFlagOrListener;
+  //     }
+  //     if (!this._channelExists(eventname)) {
+  //         this._channelCreate(eventname);
+  //         exec(function () { return _this._channelSubscribe(eventname, f); }, function (err) { return console.log("ERROR addEventListener: ", err); }, "PushNotification", "addEventListener", [eventname, isGlobal]);
+  //     }
+  //     else {
+  //         this._channelSubscribe(eventname, f);
+  //     }
+  //     exec(successCallback, errorCallback, 'PushNotification', 'addEventListener', [eventname, isGlobal]);
+  //   }
+  // }
 ]);
 
   return PushNotification;
@@ -396,6 +396,29 @@ module.exports = {
   listChannels: function listChannels(successCallback, errorCallback) {
     exec(successCallback, errorCallback, 'PushNotification', 'listChannels', []);
   },
+  addEventListener: function addEventListener(successCallback, errorCallback,eventname, globalFlagOrListener, listener) {
+      var _this = this;
+      var isGlobal = false;
+      var f = function () { };
+      if (typeof globalFlagOrListener === 'boolean') {
+          isGlobal = globalFlagOrListener;
+          if (!listener)
+              throw "listener must be defined!";
+          f = listener;
+      }
+      else if (typeof globalFlagOrListener === 'function') {
+          f = globalFlagOrListener;
+      }
+      if (!this._channelExists(eventname)) {
+          this._channelCreate(eventname);
+          exec(function () { return _this._channelSubscribe(eventname, f); }, function (err) { return console.log("ERROR addEventListener: ", err); }, "PushNotification", "addEventListener", [eventname, isGlobal]);
+      }
+      else {
+          this._channelSubscribe(eventname, f);
+      }
+      exec(successCallback, errorCallback, 'PushNotification', 'addEventListener', [eventname, isGlobal]);
+  },
+
 
   /**
    * PushNotification Object.
