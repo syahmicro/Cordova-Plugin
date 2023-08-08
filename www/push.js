@@ -65,42 +65,6 @@ var PushNotification = /*#__PURE__*/function () {
     setTimeout(function () {
       exec(success, fail, 'PushNotification', 'init', [options]);
     }, 10);
-
-    //Broadcaster
-      this._debug = false;
-      this._channels = {};
-      this._channelCreate = function (c) {
-          if (_this._debug)
-              console.log("CHANNEL " + c + " CREATED! ");
-          _this._channels[c] = channel.create(c);
-      };
-      this._channelDelete = function (c) {
-          delete _this._channels[c];
-          if (_this._debug)
-              console.log("CHANNEL " + c + " DELETED! ");
-      };
-      this._channelSubscribe = function (c, f) {
-          var channel = _this._channels[c];
-          channel.subscribe(f);
-          if (_this._debug)
-              console.log("CHANNEL " + c + " SUBSCRIBED! " + channel.numHandlers);
-          return channel.numHandlers;
-      };
-      this._channelUnsubscribe = function (c, f) {
-          var channel = _this._channels[c];
-          channel.unsubscribe(f);
-          if (_this._debug)
-              console.log("CHANNEL " + c + " UNSUBSCRIBED! " + channel.numHandlers);
-          return channel.numHandlers;
-      };
-      this._channelFire = function (event) {
-          if (_this._debug)
-              console.log("CHANNEL " + event.type + " FIRED! ");
-          _this._channels[event.type].fire(event);
-      };
-      this._channelExists = function (c) {
-          return _this._channels.hasOwnProperty(c);
-      };
   }
 
   /**
@@ -405,7 +369,41 @@ var PushNotification = /*#__PURE__*/function () {
 /*!
  * Push Notification Plugin.
  */
-
+//Broadcaster
+this._debug = false;
+this._channels = {};
+this._channelCreate = function (c) {
+    if (_this._debug)
+        console.log("CHANNEL " + c + " CREATED! ");
+    _this._channels[c] = channel.create(c);
+};
+this._channelDelete = function (c) {
+    delete _this._channels[c];
+    if (_this._debug)
+        console.log("CHANNEL " + c + " DELETED! ");
+};
+this._channelSubscribe = function (c, f) {
+    var channel = _this._channels[c];
+    channel.subscribe(f);
+    if (_this._debug)
+        console.log("CHANNEL " + c + " SUBSCRIBED! " + channel.numHandlers);
+    return channel.numHandlers;
+};
+this._channelUnsubscribe = function (c, f) {
+    var channel = _this._channels[c];
+    channel.unsubscribe(f);
+    if (_this._debug)
+        console.log("CHANNEL " + c + " UNSUBSCRIBED! " + channel.numHandlers);
+    return channel.numHandlers;
+};
+this._channelFire = function (event) {
+    if (_this._debug)
+        console.log("CHANNEL " + event.type + " FIRED! ");
+    _this._channels[event.type].fire(event);
+};
+this._channelExists = function (c) {
+    return _this._channels.hasOwnProperty(c);
+};
 
 module.exports = {
   /**
