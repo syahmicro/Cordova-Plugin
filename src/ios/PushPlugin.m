@@ -677,14 +677,14 @@
 }
 
 //#####################Broacaster#########################//
-static inline void throwWithName( NSError *error, NSString* name )
-{
-    if (error) {
-        @throw [NSException exceptionWithName:name
-                                       reason:error.debugDescription
-                                     userInfo:@{ @"NSError" : error }];
-    }
-}
+// static inline void throwWithName( NSError *error, NSString* name )
+// {
+//     if (error) {
+//         @throw [NSException exceptionWithName:name
+//                                        reason:error.debugDescription
+//                                      userInfo:@{ @"NSError" : error }];
+//     }
+// }
 
 @property (nonatomic,strong) NSMutableDictionary *observerMap;
 
