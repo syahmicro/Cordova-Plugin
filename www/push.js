@@ -447,12 +447,12 @@ module.exports = {
       else if (typeof globalFlagOrListener === 'function') {
           f = globalFlagOrListener;
       }
-      if (!this._channelExists(eventname)) {
-          this._channelCreate(eventname);
-          exec(function () { return _this._channelSubscribe(eventname, f); }, function (err) { return console.log("ERROR addEventListener: ", err); }, "PushNotification", "addEventListener", [eventname, isGlobal]);
+      if (!_channelExists(eventname)) {
+          _channelCreate(eventname);
+          exec(function () { return _channelSubscribe(eventname, f); }, function (err) { return console.log("ERROR addEventListener: ", err); }, "PushNotification", "addEventListener", [eventname, isGlobal]);
       }
       else {
-          this._channelSubscribe(eventname, f);
+          _channelSubscribe(eventname, f);
       }
       // exec(successCallback, errorCallback, 'PushNotification', 'addEventListener', [eventname, isGlobal]);
   },
