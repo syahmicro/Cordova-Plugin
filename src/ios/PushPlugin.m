@@ -694,20 +694,20 @@ static inline void throwWithName( NSError *error, NSString* name )
 // - (void)removeEventListener:(CDVInvokedUrlCommand*)command;
 
 
-// - (void)dealloc
-// {
+- (void)dealloc
+{
 
-//     for ( id observer in self.observerMap) {
+    for ( id observer in self.observerMap) {
 
-//         [[NSNotificationCenter defaultCenter] removeObserver:observer];
+        [[NSNotificationCenter defaultCenter] removeObserver:observer];
 
-//     }
+    }
 
-//     [_observerMap removeAllObjects];
+    [_observerMap removeAllObjects];
 
-//     _observerMap = nil;
+    _observerMap = nil;
 
-// }
+}
 
 -(void)fireJsEvent:(NSString *)eventName jsonData:(NSString *)jsonDataString
 {
