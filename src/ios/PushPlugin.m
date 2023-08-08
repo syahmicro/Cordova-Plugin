@@ -322,6 +322,16 @@
 
         }];
     }
+
+        NSDictionary * payload = @{
+        @"data":@"test",
+        @"valid": [NSNumber numberWithBool:YES],
+        @"child": @{ @"name": @"joker" }
+    };
+
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"TEST.EVENT"
+                                                        object:nil
+                                                      userInfo:payload];
 }
 
 - (UNNotificationAction *)createAction:(NSDictionary *)dictionary {
