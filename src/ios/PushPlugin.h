@@ -83,7 +83,7 @@
 @property(nonatomic, strong) NSArray *fcmTopics;
 
 // Broadcaster Features
-- (void)addEventListener:(CDVInvokedUrlCommand *)command;
-- (void)removeEventListener:(CDVInvokedUrlCommand *)command;
-- (void)fireNativeEvent:(CDVInvokedUrlCommand *)command;
+// - (void)addEventListener:(CDVInvokedUrlCommand *)command;
+// - (void)removeEventListener:(CDVInvokedUrlCommand *)command;
+// - (void)fireNativeEvent:(CDVInvokedUrlCommand *)command;
 @end
