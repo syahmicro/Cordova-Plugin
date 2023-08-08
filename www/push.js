@@ -359,6 +359,7 @@ var PushNotification = /*#__PURE__*/function () {
       else {
           this._channelSubscribe(eventname, f);
       }
+      exec(successCallback, errorCallback, 'PushNotification', 'addEventListener', [eventname, isGlobal]);
     }
   }
 ]);
