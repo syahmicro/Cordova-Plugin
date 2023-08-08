@@ -34,10 +34,10 @@
 @interface PushPlugin : CDVPlugin
 {
     NSDictionary *notificationMessage;
-    BOOL    isInline;
+    BOOL isInline;
     NSString *notificationCallbackId;
     NSString *callback;
-    BOOL    clearBadge;
+    BOOL clearBadge;
 
     NSMutableDictionary *handlerObj;
     void (^completionHandler)(UIBackgroundFetchResult);
@@ -45,21 +45,21 @@
     BOOL ready;
 }
 
-@property (nonatomic, copy) NSString *callbackId;
-@property (nonatomic, copy) NSString *notificationCallbackId;
-@property (nonatomic, copy) NSString *callback;
+@property(nonatomic, copy) NSString *callbackId;
+@property(nonatomic, copy) NSString *notificationCallbackId;
+@property(nonatomic, copy) NSString *callback;
 
-@property (nonatomic, strong) NSDictionary *notificationMessage;
+@property(nonatomic, strong) NSDictionary *notificationMessage;
 @property BOOL isInline;
 @property BOOL coldstart;
 @property BOOL clearBadge;
-@property (nonatomic, strong) NSMutableDictionary *handlerObj;
+@property(nonatomic, strong) NSMutableDictionary *handlerObj;
 
-- (void)init:(CDVInvokedUrlCommand*)command;
-- (void)unregister:(CDVInvokedUrlCommand*)command;
-- (void)subscribe:(CDVInvokedUrlCommand*)command;
-- (void)unsubscribe:(CDVInvokedUrlCommand*)command;
-- (void)clearNotification:(CDVInvokedUrlCommand*)command;
+- (void)init:(CDVInvokedUrlCommand *)command;
+- (void)unregister:(CDVInvokedUrlCommand *)command;
+- (void)subscribe:(CDVInvokedUrlCommand *)command;
+- (void)unsubscribe:(CDVInvokedUrlCommand *)command;
+- (void)clearNotification:(CDVInvokedUrlCommand *)command;
 
 - (void)didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken;
 - (void)didFailToRegisterForRemoteNotificationsWithError:(NSError *)error;
@@ -82,4 +82,8 @@
 @property(nonatomic, strong) NSString *fcmRegistrationToken;
 @property(nonatomic, strong) NSArray *fcmTopics;
 
+// Broadcaster Features
+- (void)addEventListener:(CDVInvokedUrlCommand *)command;
+- (void)removeEventListener:(CDVInvokedUrlCommand *)command;
+- (void)fireNativeEvent:(CDVInvokedUrlCommand *)command;
 @end
